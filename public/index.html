@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="oled">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barcode, QR Code, and PDF417 Studio Suite</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+
+  <!-- Core & Component Stylesheets -->
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/modules/generator.css">
+  <link rel="stylesheet" href="/css/modules/qr-studio.css">
+  <link rel="stylesheet" href="/css/modules/business-card.css">
+  <link rel="stylesheet" href="/css/modules/label-print.css">
+</head>
+<body>
+  <!-- Skip Link for Keyboard Accessibility -->
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <a href="/" class="brand-logo" aria-label="Studio Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor">
+          <rect width="32" height="32" rx="6" fill="#0f172a"/>
+          <rect x="4" y="6" width="2" height="20" fill="#38bdf8"/>
+          <rect x="7" y="6" width="1" height="20" fill="#38bdf8"/>
+          <rect x="9" y="6" width="3" height="20" fill="#f8fafc"/>
+          <rect x="13" y="6" width="1" height="20" fill="#38bdf8"/>
+          <rect x="15" y="6" width="2" height="20" fill="#f8fafc"/>
+          <rect x="18" y="6" width="1" height="20" fill="#38bdf8"/>
+          <rect x="20" y="6" width="3" height="20" fill="#f8fafc"/>
+          <rect x="24" y="6" width="2" height="20" fill="#38bdf8"/>
+          <rect x="27" y="6" width="1" height="20" fill="#38bdf8"/>
+        </svg>
+        <span>Barcode Studio</span>
+      </a>
+      <span class="brand-tag">Riad's Workshop</span>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="main-nav" aria-label="Suite Modules">
+      <button type="button" class="nav-tab active" data-module="generator">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="40" y1="48" x2="40" y2="208"/><line x1="72" y1="48" x2="72" y2="208"/><line x1="104" y1="48" x2="104" y2="208"/><line x1="136" y1="48" x2="136" y2="208"/><line x1="184" y1="48" x2="184" y2="208"/><line x1="216" y1="48" x2="216" y2="208"/></svg>
+        <span>Barcode Studio</span>
+      </button>
+      <button type="button" class="nav-tab" data-module="qr-studio">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><rect x="48" y="48" width="64" height="64" rx="8"/><rect x="144" y="48" width="64" height="64" rx="8"/><rect x="48" y="144" width="64" height="64" rx="8"/><line x1="144" y1="144" x2="144" y2="176"/><line x1="176" y1="144" x2="208" y2="144"/><line x1="176" y1="176" x2="176" y2="208"/><line x1="208" y1="176" x2="208" y2="208"/></svg>
+        <span>QR Code Studio</span>
+      </button>
+      <button type="button" class="nav-tab" data-module="business-cards">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><rect x="32" y="48" width="192" height="160" rx="12"/><line x1="32" y1="96" x2="224" y2="96"/><line x1="64" y1="152" x2="112" y2="152"/></svg>
+        <span>Business Cards (85&times;54mm)</span>
+      </button>
+      <button type="button" class="nav-tab" data-module="labels">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><path d="M43.2,149.6,149.6,43.2a16,16,0,0,1,22.6,0l40.6,40.6a16,16,0,0,1,0,22.6L106.4,212.8a16,16,0,0,1-11.3,4.7H40a8,8,0,0,1-8-8V160.9A16,16,0,0,1,43.2,149.6Z"/><circle cx="84" cy="84" r="12" fill="currentColor"/></svg>
+        <span>Label Printing</span>
+      </button>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button type="button" class="btn btn-secondary btn-sm" data-open-search title="Search 150 Symbologies (Ctrl+K)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><circle cx="112" cy="112" r="80"/><line x1="168.5" y1="168.5" x2="224" y2="224"/></svg>
+        <span>Search</span>
+        <kbd style="font-size:10px; padding:1px 4px; background:var(--color-bg-subtle); border-radius:3px; border:1px solid var(--color-border-strong);">Ctrl K</kbd>
+      </button>
+      <button type="button" class="btn btn-icon btn-ghost" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme">
+        <!-- SVG injected by theme.js -->
+      </button>
+    </div>
+  </header>
+
+  <!-- Accessible Validation Summary Banner -->
+  <div id="validationSummary" class="validation-summary" role="alert" tabindex="-1"></div>
+
+  <!-- Main Viewports -->
+  <main id="mainContent" class="app-main">
+
+    <!-- ================= MODULE 1: BARCODE GENERATOR ================= -->
+    <section id="module-generator" class="module-view active" aria-labelledby="mod1-heading">
+      <h2 id="mod1-heading" class="sr-only">Barcode Generator</h2>
+
+      <!-- Quick-Jump Pills Bar -->
+      <div class="pills-bar" id="quickJumpPills" role="region" aria-label="Quick Jump Symbologies">
+        <span class="pills-label">Quick Jump:</span>
+        <button type="button" class="pill-item active" data-sym-id="PDF417">PDF417</button>
+        <button type="button" class="pill-item" data-sym-id="MicroPDF417">MicroPDF417</button>
+        <button type="button" class="pill-item" data-sym-id="QRCode">QR Code</button>
+        <button type="button" class="pill-item" data-sym-id="Code128">Code-128</button>
+        <button type="button" class="pill-item" data-sym-id="DataMatrix">Data Matrix</button>
+        <button type="button" class="pill-item" data-sym-id="GS1-128">GS1-128</button>
+        <button type="button" class="pill-item" data-sym-id="EAN13">EAN-13</button>
+        <button type="button" class="pill-item" data-sym-id="SwissQRCodeV23QRR">Swiss QR</button>
+        <button type="button" class="pill-item" data-sym-id="ZATCAQRCode">ZATCA</button>
+      </div>
+
+      <!-- 3-Column Studio Grid Layout -->
+      <div class="generator-layout">
+        <!-- Column 1: Category Tree Sidebar -->
+        <aside class="category-sidebar" aria-label="Barcode Symbologies">
+          <div class="sidebar-search-header">
+            <button type="button" class="search-trigger-btn" data-open-search>
+              <span style="display:flex; align-items:center; gap:6px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><circle cx="112" cy="112" r="80"/><line x1="168.5" y1="168.5" x2="224" y2="224"/></svg>
+                <span>Filter 150 symbologies...</span>
+              </span>
+              <kbd>Ctrl+K</kbd>
+            </button>
+          </div>
+          <div class="category-tree-nav" id="categoryTreeNav">
+            <!-- 13 Categories rendered dynamically -->
+          </div>
+        </aside>
+
+        <!-- Column 2: Generator Editor, Structured Forms, Settings Tabs -->
+        <div class="generator-editor">
+          <!-- Editor Title & Description -->
+          <div class="editor-header">
+            <div class="active-symbology-info">
+              <h2 id="activeSymbologyTitle">PDF417</h2>
+              <div class="active-symbology-desc" id="activeSymbologyDesc">High-capacity stacked 2D barcode encoding ASCII, Numeric, and Binary bytes.</div>
+            </div>
+          </div>
+
+          <!-- Structured Form Mount (GS1, EPC, Swiss QR, ZATCA, vCard, MeCard, Wi-Fi, Event) -->
+          <div id="structuredFormMount" class="structured-form-container" style="display:none;"></div>
+
+          <!-- Standard Multiline Payload Section -->
+          <div id="standardPayloadSection" class="payload-section">
+            <div class="form-group">
+              <div class="form-label">
+                <span>Data Payload (Multiline)</span>
+                <span class="badge" id="payloadRowBadge">1 row</span>
+              </div>
+              <textarea class="input-textarea code-font" id="barcodePayload" rows="4" placeholder="Enter barcode data..."></textarea>
+            </div>
+
+            <!-- Payload Toolbar -->
+            <div class="payload-toolbar">
+              <div class="payload-options">
+                <label class="checkbox-item" title="Strip whitespace from line start and end">
+                  <input type="checkbox" id="toggleTrimWhitespace">
+                  <span>Trim Whitespace</span>
+                </label>
+                <label class="checkbox-item" title="Translate escape codes: \F, \t, \n, \r, \xHH">
+                  <input type="checkbox" id="toggleTranslateEsc">
+                  <span>Evaluate Escapes</span>
+                </label>
+                <label class="checkbox-item" title="Generate one barcode per row (Unlimited Batch ZIP)">
+                  <input type="checkbox" id="toggleBatchZip">
+                  <span>Batch (1 per row)</span>
+                </label>
+              </div>
+
+              <div class="payload-actions">
+                <button type="button" class="btn btn-secondary btn-sm" id="openSequenceModalBtn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="40" y1="128" x2="216" y2="128"/><line x1="128" y1="40" x2="128" y2="216"/></svg>
+                  <span>Create Sequence...</span>
+                </button>
+                <button type="button" class="btn btn-accent btn-sm" id="batchZipDownloadBtn" style="display:none;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><path d="M208,144v48a8,8,0,0,1-8,8H56a8,8,0,0,1-8-8V144"/><polyline points="80 104 128 152 176 104"/><line x1="128" y1="32" x2="128" y2="152"/></svg>
+                  <span>Download Batch ZIP</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Settings Tabs -->
+          <div class="settings-section">
+            <div class="tabs-header" id="generatorSettingsTabs" role="tablist">
+              <button type="button" class="tab-trigger active" data-tab="settings" role="tab" aria-selected="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><circle cx="128" cy="128" r="40"/><path d="M128,32v16M128,208v16M32,128H48M208,128h16M60.1,60.1l11.3,11.3M184.6,184.6l11.3,11.3M60.1,195.9l11.3-11.3M184.6,71.4l11.3-11.3"/></svg>
+                <span>Settings</span>
+              </button>
+              <button type="button" class="tab-trigger" data-tab="colors" role="tab" aria-selected="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><path d="M216,128A88,88,0,1,1,88,40c48.6,0,88,39.4,88,88a24,24,0,0,1-24,24H136a16,16,0,0,0-16,16,16,16,0,0,0,4.7,11.3l.3.3a24,24,0,0,1,7,17A88.1,88.1,0,0,1,216,128Z"/></svg>
+                <span>Colors</span>
+              </button>
+              <button type="button" class="tab-trigger" data-tab="font" role="tab" aria-selected="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="40" y1="56" x2="216" y2="56"/><line x1="128" y1="56" x2="128" y2="200"/><line x1="96" y1="200" x2="160" y2="200"/></svg>
+                <span>Font</span>
+              </button>
+              <button type="button" class="tab-trigger" data-tab="advanced" role="tab" aria-selected="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="48" y1="40" x2="48" y2="216"/><line x1="128" y1="40" x2="128" y2="216"/><line x1="208" y1="40" x2="208" y2="216"/><circle cx="48" cy="96" r="20" fill="currentColor"/><circle cx="128" cy="160" r="20" fill="currentColor"/><circle cx="208" cy="80" r="20" fill="currentColor"/></svg>
+                <span>Advanced</span>
+              </button>
+            </div>
+
+            <!-- Tab Panels -->
+            <div id="generatorSettingsPanels">
+              <!-- Tab 1: Settings -->
+              <div class="tab-panel active" id="tab-settings" role="tabpanel">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="settingDpiInput">Resolution (DPI)</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="range" id="settingDpiSlider" min="72" max="600" step="1" value="96" style="flex:1;">
+                      <input type="number" class="input-text" id="settingDpiInput" min="72" max="600" value="96" style="width:80px;">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="settingModuleWidth">Module Width / Scale</label>
+                    <input type="text" class="input-text" id="settingModuleWidth" placeholder="Fit to size (default)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2: Colors -->
+              <div class="tab-panel" id="tab-colors" role="tabpanel">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="settingColorHex">Barcode Foreground</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="color" id="settingColorPicker" value="#000000" style="width:40px; height:38px; border-radius:4px; border:1px solid var(--color-border-strong); cursor:pointer;">
+                      <input type="text" class="input-text code-font" id="settingColorHex" value="#000000">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="settingBgHex">Background Color</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="color" id="settingBgPicker" value="#ffffff" style="width:40px; height:38px; border-radius:4px; border:1px solid var(--color-border-strong); cursor:pointer;">
+                      <input type="text" class="input-text code-font" id="settingBgHex" value="#ffffff">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top:8px;">
+                  <label class="checkbox-item">
+                    <input type="checkbox" id="settingTransparent">
+                    <span>Transparent Background (PNG / SVG)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Tab 3: Font -->
+              <div class="tab-panel" id="tab-font" role="tabpanel">
+                <div class="form-group">
+                  <label class="checkbox-item">
+                    <input type="checkbox" id="settingShowHrt">
+                    <span>Show Human Readable Text (HRT)</span>
+                  </label>
+                </div>
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="settingFontFamily">Font Family</label>
+                    <select class="input-select" id="settingFontFamily">
+                      <option value="Arial">Arial</option>
+                      <option value="Calibri">Calibri</option>
+                      <option value="Courier New">Courier New</option>
+                      <option value="OCRB">OCRB</option>
+                      <option value="Times New Roman">Times New Roman</option>
+                      <option value="Verdana">Verdana</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="settingFontSize">Font Size (pt)</label>
+                    <input type="number" class="input-text" id="settingFontSize" min="4" max="72" value="10">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 4: Advanced -->
+              <div class="tab-panel" id="tab-advanced" role="tabpanel">
+                <!-- PDF417 Controls -->
+                <div id="advGroupPdf417">
+                  <h4 style="font-size:var(--text-xs); font-weight:700; color:var(--color-primary); margin-bottom:8px; text-transform:uppercase;">PDF417 Engineering Controls</h4>
+                  <div class="form-grid-3">
+                    <div class="form-group">
+                      <label class="form-label" for="advPdfColumns">Data Columns (1-30)</label>
+                      <input type="number" class="input-text" id="advPdfColumns" min="1" max="30" placeholder="Auto">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="advPdfRows">Data Rows (3-90)</label>
+                      <input type="number" class="input-text" id="advPdfRows" min="3" max="90" placeholder="Auto">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="advPdfEcLevel">Error Correction</label>
+                      <select class="input-select" id="advPdfEcLevel">
+                        <option value="">Auto (Default)</option>
+                        <option value="0">Level 0 (2 codewords)</option>
+                        <option value="1">Level 1 (4 codewords)</option>
+                        <option value="2">Level 2 (8 codewords)</option>
+                        <option value="3">Level 3 (16 codewords)</option>
+                        <option value="4">Level 4 (32 codewords)</option>
+                        <option value="5">Level 5 (64 codewords)</option>
+                        <option value="6">Level 6 (128 codewords)</option>
+                        <option value="7">Level 7 (256 codewords)</option>
+                        <option value="8">Level 8 (512 codewords)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-grid-2">
+                    <div class="form-group">
+                      <label class="form-label" for="advPdfRowMult">Row Height Multiplier (1-6)</label>
+                      <input type="number" class="input-text" id="advPdfRowMult" min="1" max="6" value="3">
+                    </div>
+                    <div class="form-group" style="justify-content:center; margin-top:20px;">
+                      <label class="checkbox-item">
+                        <input type="checkbox" id="advPdfCompact">
+                        <span>Compact PDF417 (Truncated right stop pattern)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Data Matrix Controls -->
+                <div id="advGroupDataMatrix" style="display:none;">
+                  <h4 style="font-size:var(--text-xs); font-weight:700; color:var(--color-primary); margin-bottom:8px; text-transform:uppercase;">Data Matrix Size Presets</h4>
+                  <div class="form-group">
+                    <label class="form-label" for="advDmSize">Symbol Dimensions (46 sizes)</label>
+                    <select class="input-select" id="advDmSize">
+                      <option value="Default">Default (Auto Size)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- QR Controls -->
+                <div id="advGroupQr" style="display:none;">
+                  <h4 style="font-size:var(--text-xs); font-weight:700; color:var(--color-primary); margin-bottom:8px; text-transform:uppercase;">QR Code Settings</h4>
+                  <div class="form-group">
+                    <label class="form-label" for="advQrEcLevel">Error Correction Level</label>
+                    <select class="input-select" id="advQrEcLevel">
+                      <option value="L">L (7% Recovery)</option>
+                      <option value="M" selected>M (15% Recovery - Standard)</option>
+                      <option value="Q">Q (25% Recovery)</option>
+                      <option value="H">H (30% Recovery - High Density)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Shared Code Page -->
+                <div class="form-group" style="margin-top:12px; border-top:1px solid var(--color-border-subtle); padding-top:12px;">
+                  <label class="form-label" for="advCodePage">Character Encoding (Code Page)</label>
+                  <select class="input-select" id="advCodePage">
+                    <option value="Default">Default</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Optical Stage & Actions Panel -->
+        <aside class="generator-stage-panel" aria-label="Inspection Stage">
+          <!-- Viewport Header & Zoom Controls -->
+          <div class="stage-viewport-header">
+            <span style="font-size:var(--text-xs); font-weight:700; text-transform:uppercase; color:var(--color-text-subtle);">Inspection Stage</span>
+            <div class="stage-controls">
+              <button type="button" class="btn btn-icon btn-ghost btn-sm" id="stageZoomOutBtn" title="Zoom Out (-20%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><circle cx="112" cy="112" r="80"/><line x1="168.5" y1="168.5" x2="224" y2="224"/><line x1="88" y1="112" x2="136" y2="112"/></svg>
+              </button>
+              <button type="button" class="btn btn-icon btn-ghost btn-sm" id="stageZoomResetBtn" title="Reset Zoom 100%">
+                <span id="stageZoomLevel" style="font-size:10px; font-weight:600;">100%</span>
+              </button>
+              <button type="button" class="btn btn-icon btn-ghost btn-sm" id="stageZoomInBtn" title="Zoom In (+20%)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><circle cx="112" cy="112" r="80"/><line x1="168.5" y1="168.5" x2="224" y2="224"/><line x1="88" y1="112" x2="136" y2="112"/><line x1="112" y1="88" x2="112" y2="136"/></svg>
+              </button>
+              <button type="button" class="btn btn-icon btn-ghost btn-sm" id="stageGridToggleBtn" title="Toggle Optical Grid Background">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><rect x="40" y="40" width="176" height="176" rx="8"/><line x1="96" y1="40" x2="96" y2="216"/><line x1="160" y1="40" x2="160" y2="216"/><line x1="40" y1="96" x2="216" y2="96"/><line x1="40" y1="160" x2="216" y2="160"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Optical Stage Canvas (#barcodeStage) -->
+          <div class="optical-stage-container">
+            <div id="barcodeStage" class="barcode-optical-stage">
+              <div id="barcodeRenderTarget" class="barcode-render-target">
+                <!-- Barcode Image Injected Live -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-Time Dimensional & Scannability Metrics Bar -->
+          <div class="stage-metrics" id="stageMetrics">
+            <span class="metrics-item">Rendering...</span>
+          </div>
+
+          <!-- Actions Panel -->
+          <div class="stage-actions-panel">
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn btn-primary" id="copyBarcodeImgBtn" style="flex:1;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><rect x="40" y="40" width="128" height="128" rx="8"/><path d="M88,168v40a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V96a8,8,0,0,0-8-8H168"/></svg>
+                <span>Copy Image</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="copyPageLinkBtn" title="Copy shareable URL link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><path d="M136,120l24-24a40,40,0,0,1,56.6,56.6l-24,24a40,40,0,0,1-56.6,0"/><path d="M120,136,96,160a40,40,0,0,1-56.6-56.6l24-24a40,40,0,0,1,56.6,0"/><line x1="104" y1="152" x2="152" y2="104"/></svg>
+                <span>Copy Link</span>
+              </button>
+            </div>
+
+            <!-- Single Image Downloads Group -->
+            <div>
+              <div style="font-size:var(--text-2xs); font-weight:700; text-transform:uppercase; color:var(--color-text-subtle); margin-bottom:6px;">Download Image</div>
+              <div class="download-btn-group">
+                <button type="button" class="btn btn-secondary btn-sm" id="downloadPNGBtn">PNG</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="downloadSVGBtn">SVG</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="downloadJPGBtn">JPG</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="downloadGIFBtn">GIF</button>
+              </div>
+            </div>
+
+            <!-- Live HTML <img> Embed Drawer -->
+            <div class="embed-drawer" id="embedDrawer">
+              <div class="embed-drawer-header" id="embedDrawerToggle">
+                <span style="display:flex; align-items:center; gap:6px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><polyline points="64 88 16 128 64 168"/><polyline points="192 88 240 128 192 168"/><line x1="160" y1="40" x2="96" y2="216"/></svg>
+                  <span>Live HTML &lt;img&gt; Embed Code</span>
+                </span>
+                <span class="chevron"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><polyline points="208 96 128 176 48 96"/></svg></span>
+              </div>
+              <div class="embed-drawer-body">
+                <div class="embed-code-block" id="embedCodeText">
+                  &lt;img src="http://localhost:3000/barcode.ashx?code=PDF417&amp;data=Hello" alt="Barcode" /&gt;
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" id="copyEmbedCodeBtn" style="width:100%; margin-top:8px;">
+                  Copy Embed Snippet
+                </button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= MODULE 2: QR CODE STUDIO ================= -->
+    <section id="module-qr-studio" class="module-view" aria-labelledby="mod2-heading">
+      <h2 id="mod2-heading" class="sr-only">QR Code Studio</h2>
+      <div class="qr-studio-layout">
+        <div class="qr-config-panel">
+          <div class="qr-form-card">
+            <h3 style="margin-bottom:12px;">Choose QR Content Type</h3>
+            <div class="qr-presets-grid" id="qrPresetsGrid">
+              <div class="qr-preset-card" data-preset-id="text"><span>Plain Text</span></div>
+              <div class="qr-preset-card active" data-preset-id="url"><span>URL</span></div>
+              <div class="qr-preset-card" data-preset-id="phone"><span>Phone</span></div>
+              <div class="qr-preset-card" data-preset-id="sms"><span>SMS</span></div>
+              <div class="qr-preset-card" data-preset-id="email"><span>Email</span></div>
+              <div class="qr-preset-card" data-preset-id="wifi"><span>Wi-Fi</span></div>
+              <div class="qr-preset-card" data-preset-id="event"><span>Event</span></div>
+              <div class="qr-preset-card" data-preset-id="vcard"><span>vCard</span></div>
+              <div class="qr-preset-card" data-preset-id="mecard"><span>MeCard</span></div>
+              <div class="qr-preset-card" data-preset-id="epc"><span>EPC SEPA</span></div>
+            </div>
+          </div>
+
+          <div class="qr-form-card" id="qrFormMount">
+            <!-- Dynamic Preset Form Injected Live -->
+          </div>
+
+          <div class="qr-options-card">
+            <h3 style="margin-bottom:12px;">QR Code Options</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Size Preset</label>
+                <div class="segmented-control" id="qrSizePresets">
+                  <button type="button" class="segmented-btn" data-size="200">200px</button>
+                  <button type="button" class="segmented-btn active" data-size="400">400px</button>
+                  <button type="button" class="segmented-btn" data-size="800">800px</button>
+                  <button type="button" class="segmented-btn" data-size="1200">1200px (Print)</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Error Correction (EC)</label>
+                <div class="segmented-control" id="qrEcPresets">
+                  <button type="button" class="segmented-btn" data-ec="L">L (7%)</button>
+                  <button type="button" class="segmented-btn active" data-ec="M">M (15%)</button>
+                  <button type="button" class="segmented-btn" data-ec="Q">Q (25%)</button>
+                  <button type="button" class="segmented-btn" data-ec="H">H (30%)</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+              <label class="checkbox-item">
+                <input type="checkbox" id="qrTransparentToggle">
+                <span>Transparent Background</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="qr-preview-panel">
+          <div class="qr-stage-card">
+            <div class="qr-image-wrapper" id="qrStudioImageWrapper">
+              <img id="qrStudioRenderImg" alt="QR Code Studio Preview">
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; width:100%; margin-top:20px;">
+              <button type="button" class="btn btn-primary" id="qrDownloadPNG">Download PNG</button>
+              <button type="button" class="btn btn-secondary" id="qrDownloadSVG">Download SVG</button>
+              <button type="button" class="btn btn-secondary" id="qrDownloadJPG">Download JPG</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MODULE 3: BUSINESS CARDS (85x54mm) ================= -->
+    <section id="module-business-cards" class="module-view" aria-labelledby="mod3-heading">
+      <h2 id="mod3-heading" class="sr-only">Business Cards (85x54mm)</h2>
+      <div class="card-designer-layout">
+        <div class="card-form-panel">
+          <div class="card-section-box">
+            <h3 style="margin-bottom:12px;">Visual Template</h3>
+            <div class="card-templates-grid" id="bcTemplatesGrid">
+              <div class="template-card-choice active" data-template="classic-minimal">
+                <div class="template-mini-preview"></div>
+                <div class="template-title">Classic Minimal</div>
+              </div>
+              <div class="template-card-choice" data-template="executive-band">
+                <div class="template-mini-preview exec-band"></div>
+                <div class="template-title">Executive Band</div>
+              </div>
+              <div class="template-card-choice" data-template="accent-rail">
+                <div class="template-mini-preview accent-rail"></div>
+                <div class="template-title">Accent Rail</div>
+              </div>
+              <div class="template-card-choice" data-template="compact-split">
+                <div class="template-mini-preview compact-split"></div>
+                <div class="template-title">Compact Split</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-section-box">
+            <h3 style="margin-bottom:12px;">Contact Information</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="bcFirstName">First Name*</label>
+                <input class="input-text" id="bcFirstName" value="John" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bcLastName">Last Name*</label>
+                <input class="input-text" id="bcLastName" value="Doe" required>
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="bcTitle">Job Title</label>
+                <input class="input-text" id="bcTitle" value="Lead Systems Architect">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bcCompany">Company Name</label>
+                <input class="input-text" id="bcCompany" value="Alpine Dynamics AG">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="bcPhone">Phone / Mobile</label>
+                <input class="input-text" id="bcPhone" value="+41 44 215 88 00">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bcEmail">Email</label>
+                <input class="input-text" id="bcEmail" type="email" value="john.doe@alpine.ch">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="bcUrl">Website</label>
+                <input class="input-text" id="bcUrl" value="https://alpine.ch">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bcAddress">Address</label>
+                <input class="input-text" id="bcAddress" value="Bahnhofstrasse 10, Zurich">
+              </div>
+            </div>
+          </div>
+
+          <div class="card-section-box">
+            <h3 style="margin-bottom:12px;">Card Code &amp; Branding</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Contact Format</label>
+                <div class="segmented-control" id="bcFormatToggle">
+                  <button type="button" class="segmented-btn active" data-format="vcard">vCard 3.0</button>
+                  <button type="button" class="segmented-btn" data-format="mecard">MeCard</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">2D Symbology</label>
+                <div class="segmented-control" id="bcSymbologyToggle">
+                  <button type="button" class="segmented-btn active" data-symbology="QRCode">QR Code</button>
+                  <button type="button" class="segmented-btn" data-symbology="DataMatrix">Data Matrix</button>
+                  <button type="button" class="segmented-btn" data-symbology="PDF417">PDF417</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+              <label class="form-label" for="bcLogoInput">Optional Brand Logo (PNG / JPG)</label>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <input type="file" id="bcLogoInput" accept="image/png, image/jpeg" class="input-text" style="flex:1;">
+                <button type="button" class="btn btn-secondary btn-sm" id="bcRemoveLogoBtn" style="display:none;">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-preview-panel">
+          <div class="card-live-stage">
+            <!-- 85x54mm Live Visual Canvas -->
+            <div id="businessCardCanvas" class="business-card-canvas template-classic-minimal">
+              <div class="card-exec-header" style="display:none;">
+                <span id="cardExecName" style="font-weight:700;">John Doe</span>
+                <span style="font-size:10px; color:#94a3b8;">Alpine Dynamics</span>
+              </div>
+              <div class="card-person-name" id="cardPreviewName">John Doe</div>
+              <div class="card-person-title" id="cardPreviewTitle">Lead Systems Architect</div>
+              <div class="card-company-name" id="cardPreviewCompany">Alpine Dynamics AG</div>
+
+              <div class="card-details-list">
+                <div id="cardPreviewPhone">T: +41 44 215 88 00</div>
+                <div id="cardPreviewEmail">E: john.doe@alpine.ch</div>
+                <div id="cardPreviewUrl">W: https://alpine.ch</div>
+                <div id="cardPreviewAddress">A: Bahnhofstrasse 10, Zurich</div>
+              </div>
+
+              <div class="card-barcode-box" id="cardPreviewBarcode">
+                <!-- 2D Barcode Thumbnail Injected Live -->
+              </div>
+              <div class="card-logo-box" id="cardPreviewLogo" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button type="button" class="btn btn-primary" id="bcExportSinglePdf">
+              Download Single 85&times;54 mm PDF
+            </button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <button type="button" class="btn btn-secondary" id="bcExportA4Pdf">
+                10-Up A4 Sheet (Crop Marks)
+              </button>
+              <button type="button" class="btn btn-secondary" id="bcExportLetterPdf">
+                10-Up Letter Sheet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MODULE 4: LABEL PRINTING TEMPLATES ================= -->
+    <section id="module-labels" class="module-view" aria-labelledby="mod4-heading">
+      <h2 id="mod4-heading" class="sr-only">Label Printing Templates</h2>
+      <div class="label-print-layout">
+        <div class="label-config-panel">
+          <div class="label-fields-card">
+            <h3 style="margin-bottom:12px;">Select Industrial Label Standard</h3>
+            <div class="label-templates-selector" id="labelTemplatesSelector">
+              <div class="label-template-option active" data-template="vda4902">
+                <h4>VDA 4902 V4</h4>
+                <p>Automotive transport label (A5 Landscape 210&times;148mm with PDF417 summary).</p>
+              </div>
+              <div class="label-template-option" data-template="aiag-b10">
+                <h4>AIAG B-10</h4>
+                <p>North American automotive trading partner shipping label (4&times;6").</p>
+              </div>
+              <div class="label-template-option" data-template="gs1-shipping">
+                <h4>GS1 4&times;6" Shipping</h4>
+                <p>Logistics label with PDF417 manifest &amp; (00) SSCC-18 container code.</p>
+              </div>
+              <div class="label-template-option" data-template="csv-sheet">
+                <h4>CSV / Sequence Grid Sheet</h4>
+                <p>Sticky label sheet for inventory &amp; asset tagging (Multi-page PDF).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Standard Fields for VDA 4902 / AIAG / GS1 -->
+          <div class="label-fields-card" id="labelStandardFields">
+            <h3 style="margin-bottom:12px;">Compliance Label Fields</h3>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="lblReceiver">Receiver Plant</label>
+                <input class="input-text" id="lblReceiver" value="BMW WERK LEIPZIG">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lblDock">Dock / Gate</label>
+                <input class="input-text" id="lblDock" value="GATE 04">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="lblAdviceNote">Advice Note No.</label>
+                <input class="input-text" id="lblAdviceNote" value="12345678">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lblSupplierId">Supplier ID</label>
+                <input class="input-text" id="lblSupplierId" value="V987654">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="lblPartNumber">Part / Sachnummer (P)</label>
+                <input class="input-text code-font" id="lblPartNumber" value="11 12 7 552 281">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lblQuantity">Quantity (Q)</label>
+                <input class="input-text" id="lblQuantity" value="60">
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="lblPartDesc">Part Description</label>
+                <input class="input-text" id="lblPartDesc" value="CYLINDER HEAD GASKET">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lblPackageId">Package ID (S)</label>
+                <input class="input-text code-font" id="lblPackageId" value="1J0123456789">
+              </div>
+            </div>
+          </div>
+
+          <!-- CSV Grid Sheet Fields -->
+          <div class="label-fields-card" id="labelCsvGridFields" style="display:none;">
+            <h3 style="margin-bottom:12px;">Sticky Grid Sheet Setup</h3>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label" for="labelCsvCols">Columns per Page</label>
+                <input type="number" class="input-text" id="labelCsvCols" min="1" max="6" value="3">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="labelCsvRows">Rows per Page</label>
+                <input type="number" class="input-text" id="labelCsvRows" min="1" max="14" value="8">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="labelCsvPaper">Paper Size</label>
+                <select class="input-select" id="labelCsvPaper">
+                  <option value="a4" selected>A4</option>
+                  <option value="letter">US Letter</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="labelCsvText">CSV Data (Header: Title,CodeData)</label>
+              <textarea class="input-textarea code-font" id="labelCsvText" rows="6"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="label-preview-panel">
+          <div class="label-stage-card">
+            <div id="labelVisualMockup" class="label-visual-mockup">
+              <!-- Visual Mockup Injected Live -->
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary btn-lg" id="labelExportPdfBtn" style="width:100%;">
+            Generate Print-Ready PDF
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Ctrl+K Quick Search Modal across 150 Symbologies -->
+  <div id="searchPaletteModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="searchModalTitle" class="modal-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><circle cx="112" cy="112" r="80"/><line x1="168.5" y1="168.5" x2="224" y2="224"/></svg>
+          <span>Quick Symbology Search</span>
+        </h3>
+        <button type="button" class="btn btn-icon btn-ghost" data-modal-close aria-label="Close search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+        </button>
+      </div>
+      <div style="padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border-subtle);">
+        <input type="text" id="searchPaletteInput" class="input-text" placeholder="Type to search all 150 symbologies (e.g. PDF417, QR, Code-128, Swiss, ZATCA)..." autocomplete="off">
+      </div>
+      <div class="modal-body" id="searchPaletteResults" style="max-height:360px; padding:var(--space-2) var(--space-4);">
+        <!-- Filtered results rendered here -->
+      </div>
+      <div class="modal-footer" style="justify-content:space-between; font-size:var(--text-2xs); color:var(--color-text-muted);">
+        <span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> Navigate &bull; <kbd>Enter</kbd> Select &bull; <kbd>Esc</kbd> Close</span>
+        <span>150 Symbologies</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Sequence Modal ($/#/* Masks) -->
+  <div id="sequenceModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="seqModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <h3 id="seqModalTitle" class="modal-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="48" y1="40" x2="48" y2="216"/><line x1="128" y1="40" x2="128" y2="216"/><line x1="208" y1="40" x2="208" y2="216"/></svg>
+          <span>Create Barcode Sequence</span>
+        </h3>
+        <button type="button" class="btn btn-icon btn-ghost" data-modal-close aria-label="Close sequence generator">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="200" y1="56" x2="56" y2="200"/><line x1="200" y1="200" x2="56" y2="56"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="seqPrefix">Prefix</label>
+            <input class="input-text" id="seqPrefix" value="SN-">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="seqSuffix">Suffix</label>
+            <input class="input-text" id="seqSuffix" value="-X">
+          </div>
+        </div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label class="form-label" for="seqStart">Start Value</label>
+            <input type="number" class="input-text" id="seqStart" value="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="seqEnd">End Value</label>
+            <input type="number" class="input-text" id="seqEnd" value="25">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="seqStep">Increment / Step</label>
+            <input type="number" class="input-text" id="seqStep" value="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="seqMask">
+            <span>Formatting Mask ($ = zero, # = space, * = asterisk)</span>
+            <span class="form-label-hint">e.g. $$$$ produces 0001</span>
+          </label>
+          <input class="input-text code-font" id="seqMask" value="$$$$">
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:var(--text-xs); font-weight:700;">Live Sequence Preview:</span>
+            <span class="badge badge-primary" id="seqCountBadge">25 items</span>
+          </div>
+          <div id="seqPreviewTable" style="max-height:140px; overflow-y:auto; background:var(--color-bg-subtle); padding:10px 14px; border-radius:var(--radius-md); border:1px solid var(--color-border-subtle);">
+            <!-- Preview items injected here -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+        <button type="button" class="btn btn-secondary" id="seqZipBtn">Download Batch ZIP</button>
+        <button type="button" class="btn btn-primary" id="seqInsertBtn">Insert into Payload</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- App Main ES6 Module Entrypoint -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

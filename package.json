@@ -1,0 +1,21 @@
+{
+  "name": "barcode-generator-pro",
+  "version": "1.0.0",
+  "description": "Local full-featured barcode, QR Code, and PDF417 generator web app inspired by barcode.tec-it.com",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "bwip-js": "^4.11.4",
+    "express": "^5.3.0",
+    "gifenc": "^1.0.3",
+    "iconv-lite": "^0.7.3",
+    "jpeg-js": "^0.4.4",
+    "jszip": "^3.10.2",
+    "pdf-lib": "^1.17.1",
+    "pngjs": "^7.0.0"
+  }
+}

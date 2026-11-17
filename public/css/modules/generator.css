@@ -1,0 +1,435 @@
+/* Module 1: Barcode Generator & Inspection Stage */
+
+.generator-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr var(--stage-width);
+  gap: 0;
+  min-height: calc(100vh - var(--header-height) - 45px);
+  background-color: var(--color-bg-app);
+}
+
+/* Column 1: Category Tree Sidebar */
+.category-sidebar {
+  background-color: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--header-height) - 45px);
+  position: sticky;
+  top: var(--header-height);
+  overflow-y: auto;
+}
+
+.sidebar-search-header {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.search-trigger-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 38px;
+}
+
+.search-trigger-btn kbd {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  font-size: var(--text-2xs);
+  color: var(--color-text-main);
+}
+
+.category-tree-nav {
+  flex: 1;
+  padding: var(--space-2) 0;
+}
+
+.category-group {
+  margin-bottom: 2px;
+}
+
+.category-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-main);
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  min-height: 36px;
+}
+
+.category-header:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.category-header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.category-header-title svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-primary);
+}
+
+.category-header .chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--color-text-subtle);
+  transition: transform var(--transition-fast);
+}
+
+.category-group.collapsed .category-items {
+  display: none;
+}
+
+.category-group.collapsed .chevron {
+  transform: rotate(-90deg);
+}
+
+.category-items {
+  padding: 2px 0 6px;
+}
+
+.category-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px 6px 36px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+  min-height: 32px;
+  text-align: left;
+}
+
+.category-item:hover {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-main);
+}
+
+.category-item.active {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Subgroups in Mobile Tagging */
+.subgroup-header {
+  padding: 6px 16px 6px 28px;
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-subtle);
+}
+
+.subgroup-items .category-item {
+  padding-left: 44px;
+}
+
+/* Column 2: Editor, Structured Forms, Settings Tabs */
+.generator-editor {
+  background-color: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.editor-header {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.active-symbology-info h2 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.active-symbology-desc {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* Payload Section */
+.payload-section {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.payload-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.payload-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.payload-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Structured Form Container */
+.structured-form-container {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-app);
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+/* Settings Tabs in Column 2 */
+.settings-section {
+  flex: 1;
+  background-color: var(--color-bg-surface);
+}
+
+/* Column 3: Optical Stage & Actions Panel */
+.generator-stage-panel {
+  background-color: var(--color-bg-surface);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: var(--header-height);
+  max-height: calc(100vh - var(--header-height) - 45px);
+  overflow-y: auto;
+}
+
+.stage-viewport-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stage-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* The Optical Stage Canvas (#barcodeStage) */
+.optical-stage-container {
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  position: relative;
+  overflow: hidden;
+}
+
+#barcodeStage,
+.barcode-optical-stage {
+  width: 100%;
+  min-height: 240px;
+  background-color: var(--color-bg-stage);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast);
+}
+
+/* Stage Grid Texture */
+.barcode-optical-stage.has-grid {
+  background-image: 
+    linear-gradient(var(--stage-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--stage-grid-line) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.barcode-render-target {
+  max-width: 90%;
+  max-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+
+.barcode-render-target img,
+.barcode-render-target svg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+/* Stage Metrics Bar */
+.stage-metrics {
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-2xs);
+  color: var(--color-text-muted);
+}
+
+.metrics-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Actions Panel */
+.stage-actions-panel {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.download-btn-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+/* Live HTML <img> Embed Drawer */
+.embed-drawer {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-subtle);
+  overflow: hidden;
+}
+
+.embed-drawer-header {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.embed-drawer-header svg {
+  width: 14px;
+  height: 14px;
+}
+
+.embed-drawer-body {
+  display: none;
+  padding: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-surface);
+}
+
+.embed-drawer.is-open .embed-drawer-body {
+  display: block;
+}
+
+.embed-code-block {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  background-color: var(--color-bg-app);
+  color: var(--color-text-main);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+  word-break: break-all;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+/* Mobile Accordion View (375x812) */
+@media (max-width: 1023px) {
+  .generator-layout {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .category-sidebar {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .generator-editor {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .generator-stage-panel {
+    position: static;
+    max-height: none;
+  }
+
+  .form-grid-2,
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .pill-item,
+  .segmented-btn,
+  .tab-trigger,
+  .category-header,
+  .category-item {
+    min-height: var(--min-tap-target);
+  }
+}
