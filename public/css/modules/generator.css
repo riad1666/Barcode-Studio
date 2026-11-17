@@ -295,6 +295,18 @@
   background-size: 16px 16px;
 }
 
+/* Transparent Background Checkerboard */
+.barcode-optical-stage.transparent-bg {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+    linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+    linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+}
+
 .barcode-render-target {
   max-width: 90%;
   max-height: 220px;
@@ -310,6 +322,11 @@
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+.barcode-optical-stage.transparent-bg .barcode-render-target img,
+.barcode-optical-stage.transparent-bg .barcode-render-target svg {
+  filter: none;
 }
 
 /* Stage Metrics Bar */

@@ -301,11 +301,57 @@ function bindEcLevels() {
 function bindOptions() {
   const transBox = document.getElementById('qrTransparentToggle');
   const wrapper = document.getElementById('qrStudioImageWrapper');
+  const fgPicker = document.getElementById('qrColorPicker');
+  const fgHex = document.getElementById('qrColorHex');
+  const bgPicker = document.getElementById('qrBgPicker');
+  const bgHex = document.getElementById('qrBgHex');
+
+  const normalizeHex = (val, fallback) => {
+    const clean = String(val || '').replace(/^#/, '').trim();
+    return /^[0-9a-fA-F]{6}$/.test(clean) ? `#${clean.toLowerCase()}` : fallback;
+  };
+
+  if (fgPicker && fgHex) {
+    fgPicker.addEventListener('input', (e) => {
+      fgHex.value = e.target.value;
+      state.qrStudio.color = e.target.value;
+      triggerQrRender();
+    });
+    fgHex.addEventListener('change', (e) => {
+      const normalized = normalizeHex(e.target.value, state.qrStudio.color);
+      fgHex.value = normalized;
+      fgPicker.value = normalized;
+      state.qrStudio.color = normalized;
+      triggerQrRender();
+    });
+  }
+
+  if (bgPicker && bgHex) {
+    bgPicker.addEventListener('input', (e) => {
+      bgHex.value = e.target.value;
+      state.qrStudio.bgcolor = e.target.value;
+      if (wrapper && !state.qrStudio.transparent) wrapper.style.backgroundColor = e.target.value;
+      triggerQrRender();
+    });
+    bgHex.addEventListener('change', (e) => {
+      const normalized = normalizeHex(e.target.value, state.qrStudio.bgcolor);
+      bgHex.value = normalized;
+      bgPicker.value = normalized;
+      state.qrStudio.bgcolor = normalized;
+      if (wrapper && !state.qrStudio.transparent) wrapper.style.backgroundColor = normalized;
+      triggerQrRender();
+    });
+  }
 
   if (transBox) {
     transBox.addEventListener('change', (e) => {
       state.qrStudio.transparent = e.target.checked;
-      if (wrapper) wrapper.classList.toggle('transparent-bg', e.target.checked);
+      if (bgPicker) bgPicker.disabled = e.target.checked;
+      if (bgHex) bgHex.disabled = e.target.checked;
+      if (wrapper) {
+        wrapper.classList.toggle('transparent-bg', e.target.checked);
+        wrapper.style.backgroundColor = e.target.checked ? '#ffffff' : state.qrStudio.bgcolor;
+      }
       triggerQrRender();
     });
   }

@@ -129,10 +129,15 @@ function applyZoom(target) {
 }
 
 export async function updateBarcodePreview() {
+  const stage = document.getElementById('barcodeStage');
   const target = document.getElementById('barcodeRenderTarget');
   const metricsEl = document.getElementById('stageMetrics');
   const embedCodeEl = document.getElementById('embedCodeText');
   if (!target) return;
+
+  if (stage) {
+    stage.classList.toggle('transparent-bg', Boolean(state.generator.transparent));
+  }
 
   const t0 = performance.now();
   const params = getActiveRenderParams();
@@ -173,11 +178,18 @@ export async function updateBarcodePreview() {
 
     // Update Embed Code
     if (embedCodeEl) {
-      const publicUrl = buildBarcodeUrl({
+      const embedParams = {
         code: params.code,
         data: params.data,
         dpi: params.dpi,
-      });
+        color: params.color,
+      };
+      if (state.generator.transparent) {
+        embedParams.transparent = 'true';
+      } else {
+        embedParams.bgcolor = params.bgcolor;
+      }
+      const publicUrl = buildBarcodeUrl(embedParams);
       embedCodeEl.textContent = `<img src="${publicUrl}" alt="Barcode ${params.code}" />`;
     }
 
@@ -192,7 +204,7 @@ export async function updateBarcodePreview() {
   }
 }
 
-function getActiveRenderParams() {
+export function getActiveRenderParams() {
   const g = state.generator;
   const params = {
     code: g.code,
@@ -200,6 +212,7 @@ function getActiveRenderParams() {
     imagetype: g.format,
     dpi: g.dpi,
     color: g.color,
+    transparent: g.transparent ? 'true' : 'false',
     bgcolor: g.transparent ? 'none' : g.bgcolor,
     showhrt: g.showhrt ? 'true' : 'false',
     fontname: g.fontname,

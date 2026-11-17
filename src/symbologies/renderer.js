@@ -166,8 +166,27 @@ function pngToJpg(pngBuffer, bgHex = 'ffffff') {
 
 function pngToGif(pngBuffer, bgHex = 'ffffff') {
   const decoded = PNG.sync.read(pngBuffer);
-  const [bgR, bgG, bgB] = hexToRgb(bgHex);
   const rgba = decoded.data;
+
+  if (bgHex === null) {
+    const opaquePalette = quantize(rgba, 63);
+    const palette = [[0, 0, 0], ...opaquePalette];
+    const rawIndex = applyPalette(rgba, opaquePalette);
+    const index = new Uint8Array(rawIndex.length);
+    for (let p = 0; p < rawIndex.length; p += 1) {
+      index[p] = rgba[p * 4 + 3] < 128 ? 0 : rawIndex[p] + 1;
+    }
+    const gif = GIFEncoder();
+    gif.writeFrame(index, decoded.width, decoded.height, {
+      palette,
+      transparent: true,
+      transparentIndex: 0,
+    });
+    gif.finish();
+    return { buffer: Buffer.from(gif.bytes()), width: decoded.width, height: decoded.height };
+  }
+
+  const [bgR, bgG, bgB] = hexToRgb(bgHex);
   for (let i = 0; i < rgba.length; i += 4) {
     const a = rgba[i + 3] / 255;
     if (a < 1) {
@@ -187,6 +206,10 @@ function pngToGif(pngBuffer, bgHex = 'ffffff') {
 
 function makeBlankPng(width = 160, height = 60, bgHex = 'ffffff') {
   const png = new PNG({ width, height });
+  if (bgHex === null) {
+    png.data.fill(0);
+    return PNG.sync.write(png);
+  }
   const [r, g, b] = hexToRgb(bgHex);
   for (let i = 0; i < png.data.length; i += 4) {
     png.data[i] = r;
@@ -222,7 +245,7 @@ async function convertOutputFormat(pngBuffer, svgString, format, bgHex) {
     };
   }
   if (fmt === 'jpg' || fmt === 'jpeg') {
-    const out = pngToJpg(pngBuffer, bgHex);
+    const out = pngToJpg(pngBuffer, bgHex || 'ffffff');
     return { ...out, mimeType: 'image/jpeg', ext: 'jpg' };
   }
   if (fmt === 'gif') {
@@ -278,7 +301,13 @@ export async function renderBarcode(rawInput = {}) {
     : ['true', 'on', '1', 'yes'].includes(String(params['translate-esc']).toLowerCase());
 
   const barColor = sanitizeHexColor(params.color, '000000');
-  const bgColor = params.transparent === true || params.transparent === 'true'
+  const transRaw = String(params.transparent ?? '').toLowerCase().trim();
+  const bgRaw = String(params.bgcolor ?? '').toLowerCase().trim();
+  const isTransparent =
+    params.transparent === true ||
+    ['true', '1', 'yes', 'on'].includes(transRaw) ||
+    ['none', 'transparent'].includes(bgRaw);
+  const bgColor = isTransparent
     ? null
     : sanitizeHexColor(params.bgcolor, 'ffffff');
   const textColor = sanitizeHexColor(params.textcolor, barColor);
@@ -385,12 +414,12 @@ export async function renderBarcode(rawInput = {}) {
 
     if (format === 'svg') {
       const svg = bwipjs.toSVG(bwipOpts);
-      const out = await convertOutputFormat(null, svg, 'svg', bgColor || 'ffffff');
+      const out = await convertOutputFormat(null, svg, 'svg', bgColor);
       return { status: 200, dpi, errorMessage: null, ...out };
     }
 
     const pngBuf = await bwipjs.toBuffer(bwipOpts);
-    const out = await convertOutputFormat(pngBuf, null, format, bgColor || 'ffffff');
+    const out = await convertOutputFormat(pngBuf, null, format, bgColor);
     return { status: 200, dpi, errorMessage: null, ...out };
   } catch (err) {
     const msg = err?.message || String(err);
@@ -402,8 +431,8 @@ export async function renderBarcode(rawInput = {}) {
     }
     if (onError === 'OnErrorIgnore') {
       const blankSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1" width="1" height="1"></svg>';
-      const blankPng = makeBlankPng(4, 4, bgColor || 'ffffff');
-      const out = await convertOutputFormat(blankPng, blankSvg, format, bgColor || 'ffffff');
+      const blankPng = makeBlankPng(4, 4, bgColor);
+      const out = await convertOutputFormat(blankPng, blankSvg, format, bgColor);
       return { status: 200, dpi, errorMessage: msg, ...out };
     }
     // Default OnErrorDisplay

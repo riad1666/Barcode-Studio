@@ -2,6 +2,17 @@
 
 A local, full-featured **Barcode, QR Code, and PDF417 Studio Suite** built with Node.js, Express 5, `bwip-js`, and `pdf-lib`.
 
+## Screenshots
+
+### Barcode Studio (150 Symbologies & Inspection Stage)
+![Barcode Studio](docs/screenshots/barcode-studio.png)
+
+### Business Cards (85×54 mm Vector PDF & 10-Up Crop-Mark Sheets)
+![Business Cards](docs/screenshots/business-cards.png)
+
+### Label Printing Templates (VDA 4902 V4, AIAG B-10, GS1 4×6", CSV Grid)
+![Label Printing](docs/screenshots/label-printing.png)
+
 ## Features
 
 ### 1. Barcode Generator (13 Categories / 150 Entries)

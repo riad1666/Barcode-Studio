@@ -472,10 +472,26 @@
                 </div>
               </div>
             </div>
+            <div class="form-grid-2" style="margin-top:8px;">
+              <div class="form-group">
+                <label class="form-label" for="qrColorHex">QR Foreground Color</label>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="color" id="qrColorPicker" value="#000000" style="width:40px; height:38px; border-radius:4px; border:1px solid var(--color-border-strong); cursor:pointer;">
+                  <input type="text" class="input-text code-font" id="qrColorHex" value="#000000">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="qrBgHex">Background Color</label>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="color" id="qrBgPicker" value="#ffffff" style="width:40px; height:38px; border-radius:4px; border:1px solid var(--color-border-strong); cursor:pointer;">
+                  <input type="text" class="input-text code-font" id="qrBgHex" value="#ffffff">
+                </div>
+              </div>
+            </div>
             <div class="form-group" style="margin-top:8px;">
               <label class="checkbox-item">
                 <input type="checkbox" id="qrTransparentToggle">
-                <span>Transparent Background</span>
+                <span>Transparent Background (PNG / SVG)</span>
               </label>
             </div>
           </div>

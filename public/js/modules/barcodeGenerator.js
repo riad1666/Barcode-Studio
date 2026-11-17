@@ -3,7 +3,7 @@
  */
 
 import { state } from '../state.js';
-import { updateBarcodePreview } from '../components/opticalStage.js';
+import { updateBarcodePreview, getActiveRenderParams } from '../components/opticalStage.js';
 import { renderEpcForm, renderSwissForm, renderZatcaForm } from '../forms/bankingForm.js';
 import { renderGs1Form } from '../forms/gs1Form.js';
 import { renderVCardForm, renderMeCardForm, renderWifiForm, renderEventForm } from '../forms/taggingForm.js';
@@ -136,15 +136,7 @@ function bindPayloadToggles() {
       try {
         batchActionBtn.disabled = true;
         batchActionBtn.textContent = 'Generating Batch ZIP...';
-        await downloadBatchZip({
-          code: state.generator.code,
-          data: state.generator.data,
-          imagetype: state.generator.format,
-          dpi: state.generator.dpi,
-          pdfcolumns: state.generator.pdfcolumns,
-          pdfrows: state.generator.pdfrows,
-          pdfeclevel: state.generator.pdfeclevel,
-        });
+        await downloadBatchZip(getActiveRenderParams());
         showToast('Batch ZIP downloaded successfully!', 'success');
       } catch (err) {
         showToast(`Batch download failed: ${err.message}`, 'error');
@@ -272,6 +264,11 @@ function bindSettingsInputs() {
   }
 
   // Colors
+  const normalizeHexInput = (val, fallback) => {
+    const clean = String(val || '').replace(/^#/, '').trim();
+    return /^[0-9a-fA-F]{6}$/.test(clean) ? `#${clean.toLowerCase()}` : fallback;
+  };
+
   const fgColor = document.getElementById('settingColorPicker');
   const fgHex = document.getElementById('settingColorHex');
   if (fgColor && fgHex) {
@@ -281,8 +278,10 @@ function bindSettingsInputs() {
       triggerDebouncedRender();
     });
     fgHex.addEventListener('change', (e) => {
-      fgColor.value = e.target.value;
-      state.generator.color = e.target.value;
+      const normalized = normalizeHexInput(e.target.value, state.generator.color);
+      fgHex.value = normalized;
+      fgColor.value = normalized;
+      state.generator.color = normalized;
       triggerDebouncedRender();
     });
   }
@@ -297,14 +296,18 @@ function bindSettingsInputs() {
       triggerDebouncedRender();
     });
     bgHex.addEventListener('change', (e) => {
-      bgColor.value = e.target.value;
-      state.generator.bgcolor = e.target.value;
+      const normalized = normalizeHexInput(e.target.value, state.generator.bgcolor);
+      bgHex.value = normalized;
+      bgColor.value = normalized;
+      state.generator.bgcolor = normalized;
       triggerDebouncedRender();
     });
     transBox.addEventListener('change', (e) => {
       state.generator.transparent = e.target.checked;
       bgColor.disabled = e.target.checked;
       bgHex.disabled = e.target.checked;
+      const stage = document.getElementById('barcodeStage');
+      if (stage) stage.classList.toggle('transparent-bg', e.target.checked);
       triggerDebouncedRender();
     });
   }
